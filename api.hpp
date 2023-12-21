@@ -39,6 +39,13 @@ class CollectiveComm {
   // WorkerHandles of all workers (including self)
   [[nodiscard]] virtual size_t num_workers() const = 0;
 
+  /**
+  * Collective prefix. This will be used by the implementation to generate a unique ID for each operator call
+  */
+  struct CollPrefix {
+    int32_t prefix;
+  };
+
 
   ///////////////////////////// Callback Definitions /////////////////////////////
 
@@ -84,15 +91,7 @@ class CollectiveComm {
   using CollBufferOffsetCb = std::function<void(Result<std::pair<std::shared_ptr<Buffer>/*data_recv*/,
                                                                  std::shared_ptr<Offsets>/*offsets_recv*/>>)>;
 
-
   ///////////////////////////// Callback-based Operator Definitions /////////////////////////////
-
-  /**
-  * Collective prefix. This will be used by the implementation to generate a unique ID for each operator call
-  */
-  struct CollPrefix {
-    int32_t prefix;
-  };
 
   /**
    * Workers would be waiting asynchronously until all workers reach the corresponding Barrier operation. When this
